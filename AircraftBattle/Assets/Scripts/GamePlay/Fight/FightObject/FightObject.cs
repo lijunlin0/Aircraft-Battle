@@ -1,0 +1,49 @@
+using System.Collections;
+using System.Collections.Generic;
+using DG.Tweening;
+using UnityEngine;
+
+public class FightObject : MonoBehaviour
+{    
+    protected MyCollider mCollider;
+    protected GameObject mDisplay;
+    protected bool mIsPoolObject;
+    protected bool mIsDead;
+
+    protected virtual void Init()
+    {
+        mIsPoolObject=false;
+        mDisplay=transform.Find("Display").gameObject;
+        mCollider=new MyCollider(mDisplay.GetComponent<BoxCollider2D>());
+        mIsDead=false;
+    }
+
+    public virtual void OnUpdate()
+    {
+        if(mIsDead)
+        {
+            return;
+        }
+        mCollider.OnUpdate();
+    }
+
+    public virtual void PlayDestroyAnimation()
+    {
+        gameObject.SetActive(false);
+        DOVirtual.DelayedCall(3,()=>
+        {
+            DOTween.Kill(gameObject);
+            if (mIsPoolObject)
+            {
+                FightManager.GetCurrent().GetPoolManager().PutGameObject(gameObject);
+                Destroy(this);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        });
+    }
+    public MyCollider GetCollider(){return mCollider;}
+    public bool IsDead() {return mIsDead;}
+}
