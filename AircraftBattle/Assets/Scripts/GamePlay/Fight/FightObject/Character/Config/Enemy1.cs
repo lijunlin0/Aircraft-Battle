@@ -15,7 +15,7 @@ public class Enemy1 : Enemy
     protected override void Init()
     {
         base.Init(CharacterId.Enemy1);
-        mShootTime=1f;
+        mShootTime=2f;
         mMoveSpeed=400;
         mAttack=5;
         mMaxHealth=50;

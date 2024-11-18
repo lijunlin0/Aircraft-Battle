@@ -20,7 +20,7 @@ public class EnemyBullet : Bullet
     protected override void Init(Character character,int points)
     {
         base.Init(character,points);
-        mMoveSpeed=500;
+        mMoveSpeed=600;
     }
     public override void OnUpdate()
     {
