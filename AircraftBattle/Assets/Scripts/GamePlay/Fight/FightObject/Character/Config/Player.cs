@@ -179,13 +179,13 @@ public class Player : Character
 
     private void OnEnergy()
     {
+        mIsOnUseEnergy=true;
         float energyDuration=EnergyDuration+EnergyMoveAnimationDuration;
         SwitchDisplay(()=>
         {
             mShooter.SetShootSpeedFactor(EnergyAttackSpeedFactor);
             mAttack*=EnergyAttackFactor;
             MainScene.GetCurrent().GetEnergyBar().UseEnergy(energyDuration);
-            mIsOnUseEnergy=true;
             mEnergyDisplay.SetActive(true);
         });
         DOVirtual.DelayedCall(energyDuration,()=>
@@ -193,10 +193,10 @@ public class Player : Character
             SwitchDisplay(()=>
             {
                 mIsOnUseEnergy=false;
+                mEnergy=0;
                 mShooter.SetShootSpeedFactor(1/EnergyAttackSpeedFactor);
                 mAttack/=EnergyAttackFactor;
                 mEnergyDisplay.SetActive(false);
-                mEnergy=0;
             });
 
         });
