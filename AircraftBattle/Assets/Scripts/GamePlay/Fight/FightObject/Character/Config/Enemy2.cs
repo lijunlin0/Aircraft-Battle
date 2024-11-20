@@ -30,6 +30,7 @@ public class Enemy2 : Enemy
 
     protected override void Shoot()
     {
+        base.Shoot();
         //创建子弹
         EnemyBullet2 bullet=EnemyBullet2.Create(this,mAttack);
         //方向朝着玩家

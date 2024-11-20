@@ -5,30 +5,37 @@ public class MainScene :MonoBehaviour
     private FightManager mFightManager;
     private ScoreText mScoreText;
     private EnergyBar mEnergyBar;
+    private ControlButton mControlButton;
+    private Joystick mJoystick;
     private static MainScene sMainScene;
     public void Awake()
     {
         sMainScene=this;
         AudioManager.AudioManagerInit(GameObject.Find("AudioManager").AddComponent<AudioManager>());
         Utility.InitScreen();
+        GameObject uiCanvas=GameObject.Find("UICanvas");
+        if(!Utility.IsPC)
+        {
+            mJoystick=Joystick.Create();
+            InputManager inputManager=uiCanvas.AddComponent<InputManager>();
+            inputManager.Init(mJoystick);
+        }
         Background.Create();
         Application.targetFrameRate=60;
         GameManager.GetInstance();
         mFightManager=new FightManager();
         mEnergyBar=EnergyBar.Create();
         mScoreText=ScoreText.Create();
-        GameObject canvas1=GameObject.Find("UICanvas");
-        GameObject canvas2=GameObject.Find("BackgroundCanvas");
-        if(!Utility.IsPC)
-        {
-            InputManager inputManager=canvas1.AddComponent<InputManager>();
-            inputManager.Init(Joystick.Create());
-        }
+        mControlButton=ControlButton.Create();
+
+
         Camera mainCamera = Camera.main;
-        RectTransform transform=canvas1.GetComponent<RectTransform>();
-        transform.sizeDelta = new Vector2(Utility.WindowWidth, Utility.WindowHeight); 
-        RectTransform transform2=canvas2.GetComponent<RectTransform>();
-        transform2.sizeDelta = new Vector2(Utility.WindowWidth, Utility.WindowHeight); 
+        Canvas[] canvases=FindObjectsOfType<Canvas>();
+        foreach(Canvas canvas in canvases)
+        {
+            RectTransform rectTransform=canvas.GetComponent<RectTransform>();
+            rectTransform.sizeDelta=new Vector2(Utility.WindowWidth, Utility.WindowHeight); 
+        } 
         mainCamera.orthographicSize=Utility.WindowHeight/2;
     }
 
@@ -40,5 +47,7 @@ public class MainScene :MonoBehaviour
     public EnergyBar GetEnergyBar(){return mEnergyBar;}
     public static MainScene GetCurrent(){return sMainScene;}
     public ScoreText GetScoreText(){return mScoreText;}
+    public ControlButton GetControlButton(){return mControlButton;}
+    public Joystick GetJoystick(){return mJoystick;}
 
 }

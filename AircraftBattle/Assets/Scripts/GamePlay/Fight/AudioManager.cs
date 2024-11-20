@@ -37,6 +37,11 @@ public class AudioManager : MonoBehaviour
         AudioClip clip=Resources.Load<AudioClip>("Sound/Explosion");
         mSoundAudioSource.PlayOneShot(clip);
     }
+    public void PlayButtonOnClick()
+    {
+        AudioClip clip=Resources.Load<AudioClip>("Sound/Button");
+        mSoundAudioSource.PlayOneShot(clip);
+    }
     public void StopPlay()
     {
         mSoundAudioSource.Stop();

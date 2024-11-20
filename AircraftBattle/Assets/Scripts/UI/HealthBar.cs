@@ -14,7 +14,7 @@ public class HealthBar : MonoBehaviour
     {
         
         GameObject prefab=Resources.Load<GameObject>("UI/HealthBar");
-        GameObject healthObject=Instantiate(prefab,character.transform.position,Quaternion.identity,GameObject.Find("UICanvas").transform);
+        GameObject healthObject=Instantiate(prefab,character.transform.position,Quaternion.identity,GameObject.Find("BarCanvas").transform);
         HealthBar healthBar=healthObject.AddComponent<HealthBar>();
         healthBar.Init(character);
         return healthBar;

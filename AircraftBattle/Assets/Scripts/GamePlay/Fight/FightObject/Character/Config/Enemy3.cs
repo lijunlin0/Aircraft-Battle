@@ -31,6 +31,7 @@ public class Enemy3 : Enemy
 
     protected override void Shoot()
     {
+        base.Shoot();
         List<Vector3> positionList=GetBulletCirclePositionList(transform.position+new Vector3(0,BulletCenterOffsetY,0),BulletCount,BulletCircleradius);
         foreach(var position in positionList)
         {

@@ -30,7 +30,6 @@ public class Character : FightObject
     protected int mAttack;
     protected SpriteRenderer mSpriteRenderer;
     protected Vector3 mPrePosition;
-    protected Animator mAnimator;
     protected int mLevel;
     protected virtual void Init(CharacterId characterId)
     {
@@ -41,8 +40,6 @@ public class Character : FightObject
         mShootTime=3;
         mAttack=10;
         mMoveSpeed=500;
-        mAnimator=mDisplay.GetComponent<Animator>();
-        mAnimator.enabled=false;
         mSpriteRenderer=mDisplay.GetComponent<SpriteRenderer>();
         mHealthBar=HealthBar.Create(this);
     }
@@ -83,9 +80,9 @@ public class Character : FightObject
         {
             return;
         }
-        mHealthBar.OnHealthChanged();
         AudioManager.GetCurrent().PlayCharacterHurtSound();
         mHealth=Mathf.Clamp(mHealth-points,0,mMaxHealth);
+        mHealthBar.OnHealthChanged();
         if(mHealth<=0)
         {
             mIsDead=true;
@@ -104,7 +101,8 @@ public class Character : FightObject
 
     public override void PlayDestroyAnimation()
     {
-        mAnimator.enabled=true;
+        gameObject.SetActive(false);
+        ExplosiveEffect.Create(transform.position);
         DOVirtual.DelayedCall(mDestroyAnimationDuration,()=>
         {
             DOTween.Kill(gameObject);

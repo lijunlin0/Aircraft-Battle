@@ -28,6 +28,7 @@ public class Enemy1 : Enemy
     }
     protected override void Shoot()
     {
+        base.Shoot();
         EnemyBullet bullet1=EnemyBullet.Create(this,mAttack);
         EnemyBullet bullet2=EnemyBullet.Create(this,mAttack,30);
         EnemyBullet bullet3=EnemyBullet.Create(this,mAttack,-30);

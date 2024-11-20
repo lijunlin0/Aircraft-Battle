@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class Enemy:Character
 {
+    //不在屏幕的敌人不进行攻击
+    protected bool mIsInScreen=true;
     protected bool mHaveInto=false;
     protected void IsBorder()
     {
@@ -12,16 +14,20 @@ public class Enemy:Character
         }
         int widthHalf=Utility.WindowWidth/2;
         int heightHalf=Utility.WindowHeight/2;
-        int offset=45;
-        if(transform.position.x<-widthHalf+offset)
+        int offset=200;
+        if(transform.position.x<-widthHalf-offset)
         {
             mIsDead=true;
+        }
+        if(transform.position.y<-heightHalf)
+        {
+            mIsInScreen=true;
         }
         if(transform.position.y<-heightHalf-offset)
         {
             mIsDead=true;
         }
-        if(transform.position.x>widthHalf-offset)
+        if(transform.position.x>widthHalf+offset)
         {
            mIsDead=true;
         }
@@ -53,11 +59,8 @@ public class Enemy:Character
 
     public override void PlayDestroyAnimation()
     {
-        mAnimator.enabled=true;
-        DOVirtual.DelayedCall(mDestroyAnimationDuration,()=>
-        {
-            gameObject.SetActive(false);
-        });
+        gameObject.SetActive(false);
+        ExplosiveEffect.Create(transform.position);
         DOVirtual.DelayedCall(3,()=>
         {
             DOTween.Kill(gameObject);
@@ -68,7 +71,6 @@ public class Enemy:Character
                 color.a = 1;
                 mSpriteRenderer.color = color;
                 mCollider.GetCollider().enabled=true;
-                mAnimator.enabled=false;
                 FightManager.GetCurrent().GetPoolManager().PutGameObject(gameObject);
                 Destroy(this);
             }
@@ -93,5 +95,12 @@ public class Enemy:Character
         base.OnUpdate();
         Border();
         Move();
+    }
+    protected override void Shoot()
+    {
+        if(!mIsInScreen)
+        {
+            return;
+        }
     }
 }

@@ -24,6 +24,8 @@ public class Player : Character
     protected GameObject mAttackRangeArea=null;
     protected GameObject mEnergyDisplay;
     protected SpriteRenderer mEnergySpriteRender;
+    protected Animator mShieldAnimator;
+    protected GameObject mShield;
     protected bool mIsMove=false;
     protected override void Init()
     {
@@ -33,9 +35,12 @@ public class Player : Character
         mShootTime=0.3f;
         mAttack=10;
         sCurrent=this;
-        mMaxHealth=400;
+        mMaxHealth=300;
         mHealth=mMaxHealth;
+        mShield=transform.Find("Shield").gameObject;
+        mShield.SetActive(false);
         mEnergyDisplay=transform.Find("Display/EnergyDisplay").gameObject;
+        
         mEnergyDisplay.SetActive(false);
         mEnergySpriteRender=mEnergyDisplay.GetComponent<SpriteRenderer>();
         //添加子弹发射器
@@ -78,12 +83,13 @@ public class Player : Character
         Sequence sequence1 = DOTween.Sequence();
         Sequence sequence2 = DOTween.Sequence();
         float fickerTime=CollideProtect/CollideProtectFickerCount;
+        mShield.SetActive(true);
         sequence1.Append(mSpriteRenderer.DOFade(0,fickerTime/2));
         sequence1.Append(mSpriteRenderer.DOFade(1,fickerTime/2));
         sequence2.Append(mEnergySpriteRender.DOFade(0,fickerTime/2));
         sequence2.Append(mEnergySpriteRender.DOFade(1,fickerTime/2));
         sequence1.SetLoops(CollideProtectFickerCount,LoopType.Restart);
-        sequence2.SetLoops(CollideProtectFickerCount,LoopType.Restart);
+        sequence2.SetLoops(CollideProtectFickerCount,LoopType.Restart).OnComplete(()=>mShield.SetActive(false));
     }
 
     private void IsBorder()
@@ -133,7 +139,8 @@ public class Player : Character
 
     public override void PlayDestroyAnimation()
     {
-        Destroy(mHealthBar);
+        gameObject.SetActive(false);
+        ExplosiveEffect.Create(transform.position);
     }
 
     public override void OnUpdate()
@@ -198,8 +205,7 @@ public class Player : Character
                 mAttack/=EnergyAttackFactor;
                 mEnergyDisplay.SetActive(false);
             });
-
-        });
+        },false);
         
     }
 

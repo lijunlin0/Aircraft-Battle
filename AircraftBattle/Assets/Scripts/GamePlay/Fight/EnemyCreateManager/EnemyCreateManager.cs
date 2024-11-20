@@ -12,7 +12,7 @@ public enum EnemyCreateChance
 
 public class EnemyCreateManager
 {
-    private float mWaveEnemyCreateTime=3f;
+    private float mWaveEnemyCreateTime=1.5f;
     private float mEnemyCreateTime=0.8f;
     private List<Character> mEnemies;
     private List<List<CharacterId>> mPendingEnemy;
@@ -67,12 +67,13 @@ public class EnemyCreateManager
         mPendingEnemy.Clear();
         List<Tuple<CharacterId,int>> enemyList=new List<Tuple<CharacterId, int>>()
         {
-            new Tuple<CharacterId, int>(CharacterId.Enemy1, 15),
-            new Tuple<CharacterId, int>(CharacterId.Enemy2, 15),
-            new Tuple<CharacterId, int>(CharacterId.Enemy3, 15),
-            new Tuple<CharacterId, int>(CharacterId.Enemy2, 30),
-            new Tuple<CharacterId, int>(CharacterId.Enemy1, 20),
-            new Tuple<CharacterId, int>(CharacterId.Enemy3, 15),
+            new Tuple<CharacterId, int>(CharacterId.Enemy1, 8),
+            new Tuple<CharacterId, int>(CharacterId.Enemy2, 8),
+            new Tuple<CharacterId, int>(CharacterId.Enemy3, 8),
+            new Tuple<CharacterId, int>(CharacterId.Enemy1, 8),
+            new Tuple<CharacterId, int>(CharacterId.Enemy2, 8),
+            new Tuple<CharacterId, int>(CharacterId.Enemy3, 8),
+
         };
         foreach(Tuple<CharacterId,int> pair in enemyList)
         {
@@ -97,7 +98,7 @@ public class EnemyCreateManager
                 {
                     mIsEnemyWaveCreate=true;
                 }
-            },false);
+            },false).SetId("EnemyCreate");
         }
         mCurrentWaveIndex++;
     }
@@ -116,7 +117,7 @@ public class EnemyCreateManager
             DOVirtual.DelayedCall(mWaveEnemyCreateTime,()=>
             {
                 CreateEnemyWave();
-            },false);
+            },false).SetId("EnemyCreate");
         }
         else
         {

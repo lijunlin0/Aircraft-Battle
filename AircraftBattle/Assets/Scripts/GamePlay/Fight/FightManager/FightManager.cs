@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 public class FightManager
@@ -28,9 +27,10 @@ public class FightManager
 
     public void GameOver(bool isWin)
     {
-
-        RedoButton.Create(isWin);
-        Time.timeScale=0;
+        DOTween.PauseAll();
+        DOTween.Play("ScoreText");
+        MainScene.GetCurrent().GetScoreText().PlayEndAnimation();
+        EndWindow.Create(isWin);
         mGameOver=true;
     }
 
